@@ -1,7 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import UnlockScreen from '@/components/UnlockScreen';
 import Dashboard from '@/components/Dashboard';
-import { verifyPassword, CONFIG } from '@/utils/auth';
+import { verifyPassword, CONFIG, hashPassword } from '@/utils/auth';
 import { GitHubService } from '@/utils/github';
 import { useToast } from '@/hooks/use-toast';
 
@@ -39,29 +40,20 @@ const Index = () => {
       url: "https://tailwindcss.com",
       summary: "Utility-first CSS framework for rapid UI development",
       tags: ["#css", "#design", "#frontend"]
-    },
-    {
-      title: "React Documentation",
-      url: "https://react.dev",
-      summary: "Official React documentation and learning resources",
-      tags: ["#react", "#javascript", "#frontend"]
-    },
-    {
-      title: "Lucide Icons",
-      url: "https://lucide.dev",
-      summary: "Beautiful & consistent icon toolkit made by the Feather team",
-      tags: ["#icons", "#design", "#ui"]
-    },
-    {
-      title: "Vercel",
-      url: "https://vercel.com",
-      summary: "Platform for frontend frameworks and static sites",
-      tags: ["#deployment", "#hosting", "#frontend"]
     }
   ];
 
+  // Debug: Show correct password hash on component mount
   useEffect(() => {
-    // Load bookmarks when unlocked
+    const generateHash = async () => {
+      const hash = await hashPassword('202069');
+      console.log('Expected hash for password "202069":', hash);
+      console.log('Stored hash in config:', CONFIG.passwordHash);
+    };
+    generateHash();
+  }, []);
+
+  useEffect(() => {
     if (isUnlocked) {
       loadBookmarks();
       testGitHubConnection();
@@ -71,12 +63,14 @@ const Index = () => {
   const testGitHubConnection = async () => {
     if (githubService) {
       try {
+        console.log('Testing GitHub connection...');
         const isConnected = await githubService.testConnection();
         if (isConnected) {
           toast({
             title: "GITHUB CONNECTED",
             description: "Repository access confirmed",
           });
+          console.log('GitHub connection successful');
         }
       } catch (error) {
         console.error('GitHub connection test failed:', error);
@@ -91,15 +85,23 @@ const Index = () => {
 
   const loadBookmarks = async () => {
     try {
+      console.log('Loading bookmarks...');
       if (githubService) {
         const githubBookmarks = await githubService.getBookmarks();
-        setBookmarks(githubBookmarks.length > 0 ? githubBookmarks : mockBookmarks);
-        toast({
-          title: "BOOKMARKS SYNCED",
-          description: "Loaded from GitHub repository",
-        });
+        if (githubBookmarks.length > 0) {
+          setBookmarks(githubBookmarks);
+          toast({
+            title: "BOOKMARKS SYNCED",
+            description: `Loaded ${githubBookmarks.length} bookmarks from GitHub`,
+          });
+        } else {
+          setBookmarks(mockBookmarks);
+          toast({
+            title: "DEMO MODE",
+            description: "Using sample bookmarks - GitHub repo is empty",
+          });
+        }
       } else {
-        // Use mock data for demo
         setBookmarks(mockBookmarks);
         toast({
           title: "DEMO MODE",
@@ -122,7 +124,9 @@ const Index = () => {
     setError('');
 
     try {
-      console.log('Attempting to unlock with password...');
+      console.log('Attempting to unlock with password:', password);
+      console.log('Expected password: 202069');
+      
       const isValid = await verifyPassword(password, CONFIG.passwordHash);
       
       if (isValid) {
@@ -142,7 +146,7 @@ const Index = () => {
         });
       } else {
         console.log('Invalid password provided');
-        setError('Invalid access code');
+        setError('Invalid access code. Use: 202069');
       }
     } catch (error) {
       console.error('Auth error:', error);
@@ -154,6 +158,7 @@ const Index = () => {
 
   const handleAddBookmark = async (bookmark: Bookmark) => {
     try {
+      console.log('Adding new bookmark:', bookmark);
       const updatedBookmarks = [...bookmarks, bookmark];
       setBookmarks(updatedBookmarks);
       
@@ -162,8 +167,9 @@ const Index = () => {
         await githubService.saveBookmarks(updatedBookmarks);
         toast({
           title: "BOOKMARK SAVED",
-          description: "Synchronized with GitHub repository",
+          description: "Successfully synchronized with GitHub repository",
         });
+        console.log('Bookmark successfully saved to GitHub');
       } else {
         toast({
           title: "BOOKMARK ADDED",
@@ -181,6 +187,7 @@ const Index = () => {
   };
 
   const handleLogout = () => {
+    console.log('Logging out...');
     setIsUnlocked(false);
     setBookmarks([]);
     setGitHubService(null);

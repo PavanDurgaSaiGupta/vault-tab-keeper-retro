@@ -11,10 +11,13 @@ export const hashPassword = async (password: string): Promise<string> => {
 // Verify password against stored hash
 export const verifyPassword = async (password: string, storedHash: string): Promise<boolean> => {
   const inputHash = await hashPassword(password);
+  console.log('Input password hash:', inputHash);
+  console.log('Stored hash:', storedHash);
   return inputHash === storedHash;
 };
 
 // Default configuration - password is "202069"
+// Hash calculation: SHA-256 of "202069" = 5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9
 export const CONFIG = {
   passwordHash: '5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9', // "202069"
   githubRepo: 'PavanDurgaSaiGupta/TooManyTabs',
