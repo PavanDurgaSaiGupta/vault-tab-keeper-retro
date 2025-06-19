@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import UnlockScreen from '@/components/UnlockScreen';
 import Dashboard from '@/components/Dashboard';
@@ -65,8 +64,30 @@ const Index = () => {
     // Load bookmarks when unlocked
     if (isUnlocked) {
       loadBookmarks();
+      testGitHubConnection();
     }
   }, [isUnlocked]);
+
+  const testGitHubConnection = async () => {
+    if (githubService) {
+      try {
+        const isConnected = await githubService.testConnection();
+        if (isConnected) {
+          toast({
+            title: "GITHUB CONNECTED",
+            description: "Repository access confirmed",
+          });
+        }
+      } catch (error) {
+        console.error('GitHub connection test failed:', error);
+        toast({
+          title: "GITHUB WARNING",
+          description: "Repository access may be limited",
+          variant: "destructive",
+        });
+      }
+    }
+  };
 
   const loadBookmarks = async () => {
     try {
@@ -101,9 +122,11 @@ const Index = () => {
     setError('');
 
     try {
+      console.log('Attempting to unlock with password...');
       const isValid = await verifyPassword(password, CONFIG.passwordHash);
       
       if (isValid) {
+        console.log('Password verified successfully');
         setIsUnlocked(true);
         
         // Initialize GitHub service
@@ -118,6 +141,7 @@ const Index = () => {
           description: "Welcome to TooManyTabs Digital Vault",
         });
       } else {
+        console.log('Invalid password provided');
         setError('Invalid access code');
       }
     } catch (error) {
@@ -134,6 +158,7 @@ const Index = () => {
       setBookmarks(updatedBookmarks);
       
       if (githubService) {
+        console.log('Syncing new bookmark to GitHub...');
         await githubService.saveBookmarks(updatedBookmarks);
         toast({
           title: "BOOKMARK SAVED",

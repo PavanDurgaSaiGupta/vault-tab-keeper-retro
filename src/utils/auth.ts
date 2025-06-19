@@ -14,9 +14,9 @@ export const verifyPassword = async (password: string, storedHash: string): Prom
   return inputHash === storedHash;
 };
 
-// Default configuration - replace with your own hash
+// Default configuration - password is "202069"
 export const CONFIG = {
-  passwordHash: 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3', // "hello"
+  passwordHash: '5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9', // "202069"
   githubRepo: 'PavanDurgaSaiGupta/TooManyTabs',
   githubToken: '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'
 };
