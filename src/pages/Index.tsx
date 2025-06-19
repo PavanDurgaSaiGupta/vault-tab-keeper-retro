@@ -73,16 +73,25 @@ const Index = () => {
       if (githubService) {
         const githubBookmarks = await githubService.getBookmarks();
         setBookmarks(githubBookmarks.length > 0 ? githubBookmarks : mockBookmarks);
+        toast({
+          title: "BOOKMARKS SYNCED",
+          description: "Loaded from GitHub repository",
+        });
       } else {
         // Use mock data for demo
         setBookmarks(mockBookmarks);
+        toast({
+          title: "DEMO MODE",
+          description: "Using sample bookmarks",
+        });
       }
     } catch (error) {
       console.error('Error loading bookmarks:', error);
       setBookmarks(mockBookmarks);
       toast({
-        title: "Using Demo Data",
-        description: "Could not connect to GitHub. Using sample bookmarks.",
+        title: "CONNECTION FAILED",
+        description: "Using demo data. Check GitHub configuration.",
+        variant: "destructive",
       });
     }
   };
@@ -97,9 +106,11 @@ const Index = () => {
       if (isValid) {
         setIsUnlocked(true);
         
-        // Initialize GitHub service if token is available
+        // Initialize GitHub service
         if (CONFIG.githubToken && CONFIG.githubRepo) {
-          setGitHubService(new GitHubService(CONFIG.githubRepo, CONFIG.githubToken));
+          const service = new GitHubService(CONFIG.githubRepo, CONFIG.githubToken);
+          setGitHubService(service);
+          console.log('GitHub service initialized:', CONFIG.githubRepo);
         }
         
         toast({
@@ -131,14 +142,14 @@ const Index = () => {
       } else {
         toast({
           title: "BOOKMARK ADDED",
-          description: "Saved locally (connect GitHub for persistence)",
+          description: "Saved locally (GitHub sync unavailable)",
         });
       }
     } catch (error) {
       console.error('Error saving bookmark:', error);
       toast({
-        title: "SAVE FAILED",
-        description: "Could not sync with GitHub repository",
+        title: "SYNC FAILED",
+        description: "Could not save to GitHub repository",
         variant: "destructive",
       });
     }

@@ -63,12 +63,13 @@ const Dashboard: React.FC<DashboardProps> = ({ bookmarks, onAddBookmark, onLogou
     <div className="min-h-screen bg-dark-bg matrix-bg">
       {/* Header */}
       <header className="border-b border-dark-border bg-dark-surface/50 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Terminal className="w-8 h-8 text-neon-green" />
+        <div className="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
+          <div className="flex items-center gap-6">
+            <Terminal className="w-12 h-12 text-neon-green" />
             <div>
-              <h1 className="text-2xl font-retro text-neon-green neon-text">TOOMANY</h1>
-              <h2 className="text-lg font-retro text-neon-cyan">TABS</h2>
+              <h1 className="text-4xl font-retro text-neon-green neon-text tracking-wider">TOOMANY</h1>
+              <h2 className="text-2xl font-retro text-neon-cyan tracking-widest">TABS</h2>
+              <p className="text-xs text-muted-foreground font-mono mt-1">DIGITAL VAULT</p>
             </div>
           </div>
           

@@ -17,6 +17,6 @@ export const verifyPassword = async (password: string, storedHash: string): Prom
 // Default configuration - replace with your own hash
 export const CONFIG = {
   passwordHash: 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3', // "hello"
-  githubRepo: 'your-username/your-repo',
-  githubToken: '' // Will be set by user
+  githubRepo: 'PavanDurgaSaiGupta/TooManyTabs',
+  githubToken: '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'
 };

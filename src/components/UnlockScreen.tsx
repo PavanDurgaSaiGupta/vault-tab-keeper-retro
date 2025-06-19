@@ -26,10 +26,10 @@ const UnlockScreen: React.FC<UnlockScreenProps> = ({ onUnlock, isLoading, error 
             <Terminal className="w-10 h-10 text-neon-green" />
           </div>
           
-          <h1 className="text-4xl font-retro text-neon-green mb-2 glitch neon-text" data-text="TOOMANY">
+          <h1 className="text-6xl font-retro text-neon-green mb-4 glitch neon-text tracking-wider" data-text="TOOMANY">
             TOOMANY
           </h1>
-          <h2 className="text-2xl font-retro text-neon-cyan mb-4">TABS</h2>
+          <h2 className="text-4xl font-retro text-neon-cyan mb-6 tracking-widest">TABS</h2>
           <p className="text-sm text-muted-foreground font-mono">
             DIGITAL VAULT • UNAUTHORIZED ACCESS PROHIBITED
           </p>
@@ -74,7 +74,7 @@ const UnlockScreen: React.FC<UnlockScreenProps> = ({ onUnlock, isLoading, error 
         <div className="mt-8 text-center">
           <div className="text-xs text-muted-foreground font-mono space-y-1">
             <p>SYSTEM STATUS: SECURE</p>
-            <p>ENCRYPTION: SHA-256</p>
+            <p>DIGITAL VAULT: ACTIVE</p>
             <p className="terminal-cursor">READY</p>
           </div>
         </div>
