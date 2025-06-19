@@ -1,5 +1,5 @@
 
-// SHA-256 password hashing utility
+// Password verification utility
 export const hashPassword = async (password: string): Promise<string> => {
   const encoder = new TextEncoder();
   const data = encoder.encode(password);
@@ -11,15 +11,17 @@ export const hashPassword = async (password: string): Promise<string> => {
 // Verify password against stored hash
 export const verifyPassword = async (password: string, storedHash: string): Promise<boolean> => {
   const inputHash = await hashPassword(password);
-  console.log('Input password hash:', inputHash);
-  console.log('Stored hash:', storedHash);
-  return inputHash === storedHash;
+  console.log('Auth: Verifying password...');
+  console.log('Auth: Input hash:', inputHash);
+  console.log('Auth: Stored hash:', storedHash);
+  const isValid = inputHash === storedHash;
+  console.log('Auth: Password valid:', isValid);
+  return isValid;
 };
 
-// Default configuration - password is "202069"
-// Hash calculation: SHA-256 of "202069" = 5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9
+// Configuration with correct password hash for "202069"
 export const CONFIG = {
-  passwordHash: '5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9', // "202069"
+  passwordHash: '2cbd2f44b21adb2249f4a94a98ae9867fc6cc9bf76c9ca1c88d7ece475ba9051', // "202069"
   githubRepo: 'PavanDurgaSaiGupta/TooManyTabs',
   githubToken: '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'
 };
